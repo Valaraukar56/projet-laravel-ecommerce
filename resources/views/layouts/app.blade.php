@@ -2,26 +2,39 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title','JT Art')</title>
+    <title>@yield('title', 'JT Art')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
 
-{{-- NAVBAR COMMUNE --}}
-<nav>
-    <h1>JTArt</h1>
-    <a href="{{ route('home') }}">Accueil</a>
-    <a href="{{ route('cart.index') }}">🛒 Panier</a>
-    <a href="{{ route('login') }}">Connexion</a>
-</nav>
+    {{-- NAV COMMUNE --}}
+    <nav class="navbar">
+        <a href="{{ route('home') }}">Accueil</a>
+        <a href="{{ route('cart.index') }}">🛒 Panier</a>
+        <a href="{{ route('login') }}">Connexion</a>
+        @auth
+            <span style="color:lime">Connecté : {{ Auth::user()->getRoleNames()->first() ?? 'Utilisateur' }}</span>
+        @endauth
 
-{{-- CONTENU SPÉCIFIQUE A CHAQUE PAGE --}}
-@yield('content')
+        @guest
+            <span style="color:orange">Pas connecté</span>
+        @endguest
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="deconnection">Déconnexion</button>
+        </form>
 
-{{-- FOOTER COMMUN --}}
-<footer>
-    Mentions légales | Contact | Réseaux sociaux
-</footer>
+    </nav>
+
+    {{-- CONTENU DE CHAQUE PAGE --}}
+    <main>
+        @yield('content')
+    </main>
+
+    {{-- FOOTER COMMUN --}}
+    <footer class="footer">
+        Mentions légales | Contact | Réseaux sociaux
+    </footer>
 
 </body>
 </html>
