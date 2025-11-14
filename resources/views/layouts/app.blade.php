@@ -9,21 +9,25 @@
 
     {{-- NAV COMMUNE --}}
     <nav class="navbar">
-        <a href="{{ route('home') }}">Accueil</a>
+         <a href="{{ route('home') }}">Accueil</a>
         <a href="{{ route('cart.index') }}">🛒 Panier</a>
-        <a href="{{ route('login') }}">Connexion</a>
+        
         @auth
+            {{-- Affiché seulement si connecté --}}
             <span style="color:lime">Connecté : {{ Auth::user()->getRoleNames()->first() ?? 'Utilisateur' }}</span>
+            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" class="deconnection">Déconnexion</button>
+            </form>
         @endauth
-
+        
         @guest
+            {{-- Affiché seulement si NON connecté --}}
+            <a href="{{ route('login') }}">Connexion</a>
             <span style="color:orange">Pas connecté</span>
         @endguest
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="deconnection">Déconnexion</button>
-        </form>
-
+        
+        <a href="docs/index.html">Documentation</a>
     </nav>
 
     {{-- CONTENU DE CHAQUE PAGE --}}

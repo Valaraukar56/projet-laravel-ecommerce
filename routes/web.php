@@ -36,3 +36,6 @@ Auth::routes();
 
 // redir home auth
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+/*Route::get('/docs',function(){
+    return view('index');
+});*/
