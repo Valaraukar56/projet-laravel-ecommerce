@@ -1,27 +1,50 @@
 @extends('layouts.app')
 @section('title', 'Produits — JT Art')
+
 @section('content')
 <header class="banner">
     @role('admin')
     <a href="{{ route('products.create') }}" class="btn">Créer un produit</a>
     @endrole
+
     <p>Des créations faites main en point de croix</p>
+
+    
+    <form method="GET" action="{{ route('products.index') }}" style="margin-top: 10px;">
+        <label for="currency">Devise :</label>
+        <select name="currency" id="currency" onchange="this.form.submit()">
+            <option value="EUR" {{ $currency == 'EUR' ? 'selected' : '' }}>EUR (€)</option>
+            <option value="USD" {{ $currency == 'USD' ? 'selected' : '' }}>USD ($)</option>
+            <option value="GBP" {{ $currency == 'GBP' ? 'selected' : '' }}>GBP (£)</option>
+        </select>
+    </form>
 </header>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+    <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
 <main class="products">
     @foreach($products as $product)
         <div class="product">
+
             @if($product->image)
                 <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
             @endif
+
             <h1>{{ $product->name }}</h1>
-            <p><strong>{{ number_format($product->price, 2, ',', ' ') }} €</strong></p>
+
+            
+            <p><strong>
+                @if ($currency === 'USD')
+                    {{ number_format($product->converted_price, 2, ',', ' ') }} $
+                @elseif ($currency === 'GBP')
+                    {{ number_format($product->converted_price, 2, ',', ' ') }} £
+                @else
+                    {{ number_format($product->converted_price, 2, ',', ' ') }} €
+                @endif
+            </strong></p>
+
             <a href="{{ route('products.show', $product) }}" class="btn">Voir</a>
             
             @auth
@@ -40,6 +63,7 @@
                     <button type="submit" class="btn btn-danger">Supprimer</button>
                 </form>
             @endrole
+
         </div>
     @endforeach
 </main>

@@ -3,16 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest; // <= important
+use App\Http\Requests\StoreProductRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // Lister tous les produits
-    public function index()
+    
+    public function index(Request $request)
     {
+        $currency = $request->get('currency', 'EUR'); 
         $products = Product::all();
-        return view('products.index', compact('products'));
+
+        foreach ($products as $product) {
+            $price = $product->price;
+
+            if ($currency === 'USD') {
+                $price = $price * 1.14;
+            } elseif ($currency === 'GBP') {
+                $price = $price / 1.18;
+            }
+
+            
+            $product->converted_price = $price;
+        }
+
+        return view('products.index', compact('products', 'currency'));
     }
 
     // Page d'un produit
