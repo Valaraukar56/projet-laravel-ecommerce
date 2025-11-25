@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest; // <= important
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -20,41 +21,41 @@ class ProductController extends Controller
         return view('products.show', compact('product'));
     }
 
-    // Formulaire de création (admin only)
+    // Formulaire de création
     public function create()
     {
         return view('products.create');
     }
 
     // Enregistrement d'un nouveau produit
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $data = $request->validate([
-            'name'  => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'image' => 'nullable|file|mimetypes:image/*'
-        ]);
+        $data = $request->validated();
 
         // Upload si image envoyée
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images', 'public'); // storage/app/public/images
+            $path = $request->file('image')->store('images', 'public');
             $data['image'] = $path;
         }
 
         Product::create($data);
 
-        return redirect()->route('products.index')->with('success', 'Produit créé avec succès !');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produit créé avec succès !');
     }
+
+    // Suppression d'un produit
     public function destroy(Product $product)
     {
-        // si tu veux supprimer aussi l'image du storage :
-        if ($product->image && \Storage::disk('public')->exists($product->image)) {
-            \Storage::disk('public')->delete($product->image);
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
         }
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produit supprimé.');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produit supprimé.');
     }
-
 }
