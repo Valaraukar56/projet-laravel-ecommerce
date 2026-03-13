@@ -66,6 +66,9 @@
 
                     @role('admin')
                         <div class="btn-group">
+                            <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
                             <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?')">
                                 @csrf
                                 @method('DELETE')

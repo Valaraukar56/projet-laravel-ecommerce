@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'JT Art - Créations fait main')</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body>
@@ -85,8 +85,11 @@
             </div>
             <div class="footer-links">
                 <a href="#">Mentions légales</a>
-                <a href="#">Contact</a>
+                @role('admin')
+                <a href="http://glpi.local/front/ticket.form.php">GLPI</a>
+                <a href="/phpmyadmin" target="_blank">phpMyAdmin</a>
                 <a href="docs/index.html">Documentation</a>
+                @endrole
             </div>
             <div class="footer-social">
                 <a href="#"><i class="bi bi-instagram"></i></a>
