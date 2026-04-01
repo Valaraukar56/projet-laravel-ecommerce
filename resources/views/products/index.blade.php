@@ -38,9 +38,9 @@
 
                 <p class="product-price">
                     @if ($currency === 'USD')
-                        {{ number_format($product->converted_price, 2, ',', ' ') }} $
+                        ${{ number_format($product->converted_price, 2, '.', ',') }}
                     @elseif ($currency === 'GBP')
-                        {{ number_format($product->converted_price, 2, ',', ' ') }} £
+                        £{{ number_format($product->converted_price, 2, '.', ',') }}
                     @else
                         {{ number_format($product->converted_price, 2, ',', ' ') }} €
                     @endif

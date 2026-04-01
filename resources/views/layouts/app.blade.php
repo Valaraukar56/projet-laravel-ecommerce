@@ -86,7 +86,7 @@
             <div class="footer-links">
                 <a href="#">Mentions légales</a>
                 @role('admin')
-                <a href="http://glpi.local/front/ticket.form.php">GLPI</a>
+                <a href="http://192.168.31.10/glpi/front/ticket.form.php">GLPI</a>
                 <a href="/phpmyadmin" target="_blank">phpMyAdmin</a>
                 <a href="docs/index.html">Documentation</a>
                 @endrole
